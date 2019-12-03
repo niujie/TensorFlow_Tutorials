@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import numpy as np
-
 import tensorflow as tf
 
 import tensorflow_hub as hub
@@ -31,7 +29,8 @@ print(train_labels_batch)
 
 # Build the model
 # pre-trained text embedding model
-embedding = "https://tfhub.dev/google/tf2-preview/gnews-swivel-20dim/1"
+# embedding = "https://tfhub.dev/google/tf2-preview/gnews-swivel-20dim/1"
+embedding = "./gnews-swivel-20dim-1.tar.gz/"
 hub_layer = hub.KerasLayer(embedding, input_shape=[],
                            dtype=tf.string, trainable=True)
 print(hub_layer(train_examples_batch[:3]))
