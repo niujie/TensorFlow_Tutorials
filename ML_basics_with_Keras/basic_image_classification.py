@@ -71,13 +71,13 @@ print(np.argmax(predictions[0]))
 print(test_labels[0])
 
 
-def plot_image(_i, predictions_array, true_label, img):
-    predictions_array, true_label, img = predictions_array, true_label[_i], img[_i]
+def plot_image(_i, predictions_array, true_label, _img):
+    predictions_array, true_label, _img = predictions_array, true_label[_i], _img[_i]
     plt.grid(False)
     plt.xticks([])
     plt.yticks([])
 
-    plt.imshow(img, cmap=plt.cm.get_cmap('binary'))
+    plt.imshow(_img, cmap=plt.cm.get_cmap('binary'))
 
     predicted_label = np.argmax(predictions_array)
     if predicted_label == true_label:
@@ -140,7 +140,7 @@ img = test_images[1]
 print(img.shape)
 
 # Add the image to a batch where it's the only member.
-img = (np.expand_dims(img,0))
+img = (np.expand_dims(img, 0))
 
 print(img.shape)
 
