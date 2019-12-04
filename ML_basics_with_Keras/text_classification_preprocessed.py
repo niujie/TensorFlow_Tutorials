@@ -11,8 +11,6 @@ import tensorflow_datasets as tfds
 
 tfds.disable_progress_bar()
 
-import numpy as np
-
 print(tf.__version__)
 
 # Download the IMDB dataset
