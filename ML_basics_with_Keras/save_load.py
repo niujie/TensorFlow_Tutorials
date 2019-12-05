@@ -135,7 +135,7 @@ model = create_model()
 model.fit(train_images, train_labels, epochs=5)
 
 # Save the entire model to a HDF5 file.
-# The '.h5' extension indicates that the model shuold be saved to HDF5.
+# The '.h5' extension indicates that the model should be saved to HDF5.
 model.save('my_model.h5')
 
 # Recreate the exact same model, including its weights and the optimizer
