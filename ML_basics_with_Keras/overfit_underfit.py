@@ -167,15 +167,16 @@ plt.ylim([0.5, 0.7])
 plt.xlabel("Epochs [Log Scale]")
 plt.show()
 
+'''
 # View in TensorBoard
-# %tensorboard --logdir {logdir}/sizes
+%tensorboard --logdir {logdir}/sizes
 
 display.IFrame(
     src="https://tensorboard.dev/experiment/vW7jmmF9TmKmy3rbheMQpw/#scalars&_smoothingWeight=0.97",
     width="100%", height="800px")
-plt.show()
 
-# !tensorboard dev upload --logdir  {logdir}/sizes
+!tensorboard dev upload --logdir  {logdir}/sizes
+'''
 
 # Strategies to prevent overfitting
 shutil.rmtree(logdir / 'regularizers/Tiny', ignore_errors=True)
@@ -248,8 +249,9 @@ plotter.plot(regularizer_histories)
 plt.ylim([0.5, 0.7])
 plt.show()
 
+'''
 # View in TensorBoard
-# %tensorboard --logdir {logdir}/regularizers
+%tensorboard --logdir {logdir}/regularizers
 
 display.IFrame(
     src="https://tensorboard.dev/experiment/fGInKDo8TXes1z7HQku9mw/#scalars&_smoothingWeight=0.97",
@@ -257,4 +259,5 @@ display.IFrame(
     height="800px")
 plt.show()
 
-# !tensorboard dev upload --logdir  {logdir}/regularizers
+!tensorboard dev upload --logdir  {logdir}/regularizers
+'''
