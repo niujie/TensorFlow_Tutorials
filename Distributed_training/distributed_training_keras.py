@@ -68,7 +68,7 @@ with strategy.scope():
 # Define the callbacks
 # Define the checkpoint directory to store the checkpoints
 
-checkpoint_dir = './training_checkpoints'
+checkpoint_dir = '.\\training_checkpoints'
 # Name of the checkpoint files
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt_{epoch}")
 
@@ -92,7 +92,7 @@ class PrintLR(tf.keras.callbacks.Callback):
 
 
 callbacks = [
-    tf.keras.callbacks.TensorBoard(log_dir='./logs'),
+    tf.keras.callbacks.TensorBoard(log_dir='.\\logs'),
     tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_prefix,
                                        save_weights_only=True),
     tf.keras.callbacks.LearningRateScheduler(decay),
@@ -105,7 +105,8 @@ callbacks = [
 # check the checkpoint directory
 # !ls {checkpoint_dir}
 
-model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
+with strategy.scope():
+    model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
 
 eval_loss, eval_acc = model.evaluate(eval_dataset)
 
@@ -114,8 +115,10 @@ print('Eval loss: {}, Eval Accuracy: {}'.format(eval_loss, eval_acc))
 # $ tensorboard --logdir=path/to/log-directory
 # !ls -sh ./logs
 
-path = 'saved_model/'
-# model.save(path, save_format='tf')
+path = 'saved_model\\'
+
+# with strategy.scope():
+#     model.save(path, save_format='tf')
 
 unreplicated_model = tf.keras.models.load_model(path)
 
@@ -128,7 +131,6 @@ eval_loss, eval_acc = unreplicated_model.evaluate(eval_dataset)
 
 print('Eval loss: {}, Eval Accuracy: {}'.format(eval_loss, eval_acc))
 
-'''
 with strategy.scope():
     replicated_model = tf.keras.models.load_model(path)
     replicated_model.compile(loss='sparse_categorical_crossentropy',
@@ -137,4 +139,3 @@ with strategy.scope():
 
     eval_loss, eval_acc = replicated_model.evaluate(eval_dataset)
     print('Eval loss: {}, Eval Accuracy: {}'.format(eval_loss, eval_acc))
-'''
