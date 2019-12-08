@@ -79,7 +79,7 @@ strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
 config = tf.estimator.RunConfig(train_distribute=strategy)
 
 classifier = tf.estimator.Estimator(
-    model_fn=model_fn, model_dir='/tmp/multiworker', config=config)
+    model_fn=model_fn, model_dir='.\\tmp\\multiworker', config=config)
 tf.estimator.train_and_evaluate(
     classifier,
     train_spec=tf.estimator.TrainSpec(input_fn=input_fn),
