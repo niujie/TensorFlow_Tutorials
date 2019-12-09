@@ -179,7 +179,7 @@ import time
 
 t = time.time()
 
-export_path = ".\\tmp\\saved_models\\{}".format(int(t))
+export_path = "./tmp/saved_models/{}".format(int(t))
 model.save(export_path, save_format='tf')
 
 print(export_path)
