@@ -3,24 +3,14 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import matplotlib.pylab as plt
 
+import os
+# to avoid GPU out of memory issue
+# force to run on CPU only
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 import tensorflow as tf
-
 import tensorflow_hub as hub
-
 from tensorflow.keras import layers
-
-# 获取所有GPU设备列表
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
-    try:
-        # 设置GPU显存占用为按需分配
-        for gpu in gpus:
-            tf.config.experimental.set_memory_growth(gpu, True)
-        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-        print(len(gpus), "Physical GPUS,", len(logical_gpus), "Logical GPUs")
-    except RuntimeError as e:
-        # 异常处理
-        print(e)
 
 # An ImageNet classifier
 # classifier_url = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/2"  # @param {type:"string"}
@@ -181,7 +171,7 @@ import time
 
 t = time.time()
 
-export_path = "./tmp/saved_models/{}".format(int(t))
+export_path = ".\\tmp\\saved_models\\{}".format(int(t))
 model.save(export_path, save_format='tf')
 
 print(export_path)
