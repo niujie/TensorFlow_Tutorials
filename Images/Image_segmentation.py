@@ -10,6 +10,19 @@ import tensorflow_datasets as tfds
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
 
+# 获取所有GPU设备列表
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # 设置GPU显存占用为按需分配
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUS,", len(logical_gpus), "Logical GPUs")
+    except RuntimeError as e:
+        # 异常处理
+        print(e)
+
 # Download the Oxford-IIT Pets dataset
 dataset, info = tfds.load('oxford_iiit_pet:3.0.0', with_info=True)
 
