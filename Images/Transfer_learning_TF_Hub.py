@@ -23,7 +23,8 @@ if gpus:
         print(e)
 
 # An ImageNet classifier
-classifier_url = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/2"  # @param {type:"string"}
+# classifier_url = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/2"  # @param {type:"string"}
+classifier_url = "./tfhub_classifier"
 IMAGE_SHAPE = (224, 224)
 
 classifier = tf.keras.Sequential([
@@ -92,7 +93,8 @@ _ = plt.suptitle("ImageNet predictions")
 plt.show()
 
 # Download the headless model
-feature_extractor_url = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/2"  # @param {type:"string"}
+# feature_extractor_url = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/2"  # @param {type:"string"}
+feature_extractor_url = "./tfhub_feature_extractor"
 
 feature_extractor_layer = hub.KerasLayer(feature_extractor_url,
                                          input_shape=(224, 224, 3))
