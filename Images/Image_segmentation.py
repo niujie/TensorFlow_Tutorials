@@ -9,6 +9,7 @@ import tensorflow_datasets as tfds
 
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
+import numpy as np
 
 # 获取所有GPU设备列表
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -77,7 +78,7 @@ def display(display_list):
     for i in range(len(display_list)):
         plt.subplot(1, len(display_list), i + 1)
         plt.title(title[i])
-        plt.imshow(tf.keras.preprocessing.image.array_to_img(display_list[i]))
+        plt.imshow(np.array(tf.keras.preprocessing.image.array_to_img(display_list[i])))
         plt.axis('off')
     plt.show()
 

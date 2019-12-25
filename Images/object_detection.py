@@ -117,7 +117,6 @@ downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
 # ssd+mobilenet V2: small and fast.
 
 # module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1" #@param ["https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1", "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"]
-# module_handle = "./inception_resnet_v2-1.tar.gz"
 module_handle = "./inception_resnet_v2-1"
 
 detector = hub.load(module_handle).signatures['default']
