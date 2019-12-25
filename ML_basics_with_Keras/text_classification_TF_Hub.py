@@ -30,7 +30,8 @@ print(train_labels_batch)
 # Build the model
 # pre-trained text embedding model
 # embedding = "https://tfhub.dev/google/tf2-preview/gnews-swivel-20dim/1"
-embedding = "./gnews-swivel-20dim-1.tar.gz/"
+# embedding = "./gnews-swivel-20dim-1.tar.gz/"
+embedding = "./gnews-swivel-20dim-1"
 hub_layer = hub.KerasLayer(embedding, input_shape=[],
                            dtype=tf.string, trainable=True)
 print(hub_layer(train_examples_batch[:3]))
