@@ -108,8 +108,6 @@ def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
 
 
 # Apply module
-image_url = "https://farm1.staticflickr.com/4032/4653948754_c0d768086b_o.jpg"  #@param
-downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
 
 # Pick an object detection module and apply on the downloaded image. Modules:
 
@@ -147,8 +145,13 @@ def run_detector(detector_, path):
     display_image(image_with_boxes)
 
 
+# image_url = "https://farm1.staticflickr.com/4032/4653948754_c0d768086b_o.jpg"  #@param
+image_url = "https://farm7.staticflickr.com/8092/8592917784_4759d3088b_o.jpg"
+downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
+
 run_detector(detector, downloaded_image_path)
 
+"""
 # More images
 image_urls = ["https://farm7.staticflickr.com/8092/8592917784_4759d3088b_o.jpg",
               "https://farm6.staticflickr.com/2598/4138342721_06f6e177f3_o.jpg",
@@ -160,3 +163,5 @@ for image_url in image_urls:
     run_detector(detector, image_path)
     end_time = time.time()
     print("Inference time: ", end_time - start_time)
+
+"""
