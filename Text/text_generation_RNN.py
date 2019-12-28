@@ -174,7 +174,7 @@ checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 # Execute the training
 EPOCHS = 10
 
-# history = model.fit(dataset, epochs=EPOCHS, callbacks=[checkpoint_callback])
+history = model.fit(dataset, epochs=EPOCHS, callbacks=[checkpoint_callback])
 
 # Generate text
 # Restore the latest checkpoint
