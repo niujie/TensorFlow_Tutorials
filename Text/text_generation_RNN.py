@@ -137,3 +137,143 @@ model = build_model(
 for input_example_batch, target_example_batch in dataset.take(1):
     example_batch_predictions = model(input_example_batch)
     print(example_batch_predictions.shape, "# (batch_size, sequence_length, vocab_size)")
+
+model.summary()
+
+sampled_indices = tf.random.categorical(example_batch_predictions[0], num_samples=1)
+sampled_indices = tf.squeeze(sampled_indices, axis=-1).numpy()
+print(sampled_indices)
+
+print("Input: \n", repr("".join(idx2char[input_example_batch[0]])))
+print()
+print("Next Char Predictions: \n", repr("".join(idx2char[sampled_indices])))
+
+
+# Train the model
+# Attach an optimizer, and a loss function
+def loss(labels, logits):
+    return tf.keras.losses.sparse_categorical_crossentropy(labels, logits, from_logits=True)
+
+
+example_batch_loss = loss(target_example_batch, example_batch_predictions)
+print("Prediction shape: ", example_batch_predictions.shape, " # (batch_size, sequence_length, vocab_size)")
+print("scalar_loss:      ", example_batch_loss.numpy().mean())
+
+model.compile(optimizer='adam', loss=loss)
+
+# Configure checkpoints
+# Directory where the checkpoints will be saved
+checkpoint_dir = './training_checkpoints'
+# Name of the checkpoint files
+checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt_{epoch}")
+
+checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+    filepath=checkpoint_prefix,
+    save_weights_only=True)
+
+# Execute the training
+EPOCHS = 10
+
+# history = model.fit(dataset, epochs=EPOCHS, callbacks=[checkpoint_callback])
+
+# Generate text
+# Restore the latest checkpoint
+print(tf.train.latest_checkpoint(checkpoint_dir))
+
+model = build_model(vocab_size, embedding_dim, rnn_units, batch_size=1)
+
+model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
+
+model.build(tf.TensorShape([1, None]))
+
+model.summary()
+
+
+# The prediction loop
+def generate_text(model_, start_string):
+    # Evaluation step (generating text using the learned model)
+
+    # Number of characters to generate
+    num_generate = 1000
+
+    # Converting our start string to numbers (vectorizing)
+    input_eval = [char2idx[s] for s in start_string]
+    input_eval = tf.expand_dims(input_eval, 0)
+
+    # Empty string to store our results
+    text_generated = []
+
+    # Low temperatures results in more predictable text.
+    # Higher temperatures results in more surprising text.
+    # Experiment to find the best setting.
+    temperature = 1.0
+
+    # Here batch size == 1
+    model_.reset_states()
+    for i in range(num_generate):
+        predictions = model_(input_eval)
+        # remove the batch dimension
+        predictions = tf.squeeze(predictions, 0)
+
+        # using a categorical distribution to predict the word returned by the model
+        predictions = predictions / temperature
+        predicted_id = tf.random.categorical(predictions, num_samples=1)[-1, 0].numpy()
+
+        # We pass the predicted word as the next input to the model
+        # along with the previous hidden state
+        input_eval = tf.expand_dims([predicted_id], 0)
+
+        text_generated.append(idx2char[predicted_id])
+
+    return start_string + ''.join(text_generated)
+
+
+print(generate_text(model, start_string=u"ROMEO: "))
+
+# Advanced: Customized Training
+model = build_model(
+    vocab_size_=len(vocab),
+    embedding_dim_=embedding_dim,
+    rnn_units_=rnn_units,
+    batch_size=BATCH_SIZE)
+
+optimizer = tf.keras.optimizers.Adam()
+
+
+@tf.function
+def train_step(inp_, target_):
+    with tf.GradientTape() as tape:
+        predictions = model(inp_)
+        loss_ = tf.reduce_mean(
+            tf.keras.losses.sparse_categorical_crossentropy(
+                target_, predictions, from_logits=True))
+    grads = tape.gradient(loss_, model.trainable_variables)
+    optimizer.apply_gradients(zip(grads, model.trainable_variables))
+
+    return loss_
+
+
+# Training step
+
+for epoch in range(EPOCHS):
+    start = time.time()
+
+    # initializing the hidden state at the start of every epoch
+    # initially hidden is None
+    hidden = model.reset_states()
+
+    for (batch_n, (inp, target)) in enumerate(dataset):
+        loss = train_step(inp, target)
+
+        if batch_n % 100 == 0:
+            template = 'Epoch {} Batch {} Loss {}'
+            print(template.format(epoch + 1, batch_n, loss))
+
+    # saving (checkpoint) the model every 5 epochs
+    if (epoch + 1) % 5 == 0:
+        model.save_weights(checkpoint_prefix.format(epoch=epoch))
+
+    print('Epoch {} Loss {:.4f}'.format(epoch + 1, loss))
+    print('Time taken for 1 epoch {} sec\n'.format(time.time() - start))
+
+model.save_weights(checkpoint_prefix.format(epoch=epoch))
