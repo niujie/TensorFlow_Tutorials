@@ -77,10 +77,9 @@ model.compile(loss='binary_crossentropy',
               metrics=['accuracy'])
 model.summary()
 # Train the model
-with tf.device('CPU:0'):
-    history = model.fit(train_dataset, epochs=10,
-                        validation_data=test_dataset,
-                        validation_steps=30)
+history = model.fit(train_dataset, epochs=10,
+                    validation_data=test_dataset,
+                    validation_steps=30)
 
 test_loss, test_acc = model.evaluate(test_dataset)
 
@@ -135,10 +134,9 @@ model.compile(loss='binary_crossentropy',
               optimizer=tf.keras.optimizers.Adam(1e-4),
               metrics=['accuracy'])
 model.summary()
-with tf.device('CPU:0'):
-    history = model.fit(train_dataset, epochs=10,
-                        validation_data=test_dataset,
-                        validation_steps=30)
+history = model.fit(train_dataset, epochs=10,
+                    validation_data=test_dataset,
+                    validation_steps=30)
 
 test_loss, test_acc = model.evaluate(test_dataset)
 

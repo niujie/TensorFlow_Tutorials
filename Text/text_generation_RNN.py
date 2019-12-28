@@ -10,6 +10,19 @@ import numpy as np
 import os
 import time
 
+# 获取所有GPU设备列表
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # 设置GPU显存占用为按需分配
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUS,", len(logical_gpus), "Logical GPUs")
+    except RuntimeError as e:
+        # 异常处理
+        print(e)
+
 # Download the Shakespeare dataset
 path_to_file = tf.keras.utils.get_file('shakespeare.txt',
                                        'https://storage.googleapis.com/download.tensorflow.org/data/shakespeare.txt')
@@ -122,6 +135,5 @@ model = build_model(
 
 # Try the model
 for input_example_batch, target_example_batch in dataset.take(1):
-    with tf.device('CPU:0'):
-        example_batch_predictions = model(input_example_batch)
+    example_batch_predictions = model(input_example_batch)
     print(example_batch_predictions.shape, "# (batch_size, sequence_length, vocab_size)")
