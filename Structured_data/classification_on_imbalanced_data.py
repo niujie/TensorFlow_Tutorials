@@ -24,10 +24,11 @@ colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 # Data processing and exploration
 # Download the Kaggle Credit Card Fraud data set
 file = tf.keras.utils
-raw_df = pd.read_csv('https://storage.googleapis.com/download.tensorflow.org/data/creditcard.csv')
+# raw_df = pd.read_csv('https://storage.googleapis.com/download.tensorflow.org/data/creditcard.csv')
+raw_df = pd.read_csv('./creditcard.csv')
 print(raw_df.head())
 
-raw_df[['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V26', 'V27', 'V28', 'Amount', 'Class']].describe()
+print(raw_df[['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V26', 'V27', 'V28', 'Amount', 'Class']].describe())
 
 # Examine the class label imbalance
 neg, pos = np.bincount(raw_df['Class'])
@@ -88,6 +89,7 @@ plt.suptitle("Positive distribution")
 sns.jointplot(neg_df['V5'], neg_df['V6'],
               kind='hex', xlim=(-5, 5), ylim=(-5, 5))
 _ = plt.suptitle("Negative distribution")
+plt.show()
 
 # Define the model and metrics
 METRICS = [
@@ -137,7 +139,7 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
 model = make_model()
 model.summary()
 
-model.predict(train_features[:10])
+print(model.predict(train_features[:10]))
 
 # Optional: Set the correct initial bias
 results = model.evaluate(train_features, train_labels, batch_size=BATCH_SIZE, verbose=0)
@@ -147,7 +149,7 @@ initial_bias = np.log([pos / neg])
 print(initial_bias)
 
 model = make_model(output_bias=initial_bias)
-model.predict(train_features[:10])
+print(model.predict(train_features[:10]))
 
 results = model.evaluate(train_features, train_labels, batch_size=BATCH_SIZE, verbose=0)
 print("Loss: {:0.4f}".format(results[0]))
@@ -194,6 +196,7 @@ def plot_loss(history, label_, n):
 
 plot_loss(zero_bias_history, "Zero Bias", 0)
 plot_loss(careful_bias_history, "Careful Bias", 1)
+plt.show()
 
 # Train the model
 model = make_model()
@@ -226,7 +229,7 @@ def plot_metrics(history):
             plt.ylim([0, 1])
 
         plt.legend()
-        plt.show()
+    plt.show()
 
 
 plot_metrics(baseline_history)
@@ -329,6 +332,7 @@ plot_roc("Train Weighted", train_labels, train_predictions_weighted, color=color
 plot_roc("Test Weighted", test_labels, test_predictions_weighted, color=colors[1], linestyle='--')
 
 plt.legend(loc='lower right')
+plt.show()
 
 # Oversampling
 pos_features = train_features[bool_train_labels]

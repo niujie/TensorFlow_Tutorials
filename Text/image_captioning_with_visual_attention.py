@@ -19,6 +19,20 @@ from glob import glob
 from PIL import Image
 import pickle
 
+# 获取所有GPU设备列表
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # 设置GPU显存占用为按需分配
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUS,", len(logical_gpus), "Logical GPUs")
+    except RuntimeError as e:
+        # 异常处理
+        print(e)
+
+
 # Download and prepare the MS-COCO dataset
 annotation_zip = tf.keras.utils.get_file('captions.zip',
                                          cache_subdir=os.path.abspath('.'),
@@ -68,12 +82,12 @@ print(len(train_captions), len(all_captions))
 
 
 # Preprocess the images using InceptionV3
-def load_image(image_path):
-    img_ = tf.io.read_file(image_path)
+def load_image(image_path_):
+    img_ = tf.io.read_file(image_path_)
     img_ = tf.image.decode_jpeg(img_, channels=3)
     img_ = tf.image.resize(img_, (299, 299))
     img_ = tf.keras.applications.inception_v3.preprocess_input(img_)
-    return img_, image_path
+    return img_, image_path_
 
 
 # Initialize InceptionV3 and load the pretrained Imagenet weights
@@ -93,7 +107,8 @@ image_dataset = tf.data.Dataset.from_tensor_slices(encode_train)
 image_dataset = image_dataset.map(
     load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE).batch(16)
 
-for img, path in image_dataset:
+from tqdm import tqdm
+for img, path in tqdm(image_dataset):
     batch_features = image_features_extract_model(img)
     batch_features = tf.reshape(batch_features,
                                 (batch_features.shape[0], -1, batch_features.shape[3]))
