@@ -1,0 +1,15 @@
+
+*.xml
+*.iml
+Load_and_preprocess_data/.ipynb_checkpoints/tfrecord-checkpoint.ipynb
+*.data-00000-of-00001
+*.index
+*.tfrecords
+*.tfrecord
+ML_basics_with_Keras/checkpoints/checkpoint
+*.txt
+*.pb
+*.h5
+ML_basics_with_Keras/training_1/checkpoint
+ML_basics_with_Keras/training_2/checkpoint
+/models/
