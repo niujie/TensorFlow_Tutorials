@@ -13,3 +13,16 @@ ML_basics_with_Keras/checkpoints/checkpoint
 ML_basics_with_Keras/training_1/checkpoint
 ML_basics_with_Keras/training_2/checkpoint
 /models/
+/Generative/arbitrary-image-stylization-v1-256-2/
+/Generative/.ipynb_checkpoints/
+/Generative/logs/
+/Generative/model.png
+/Images/model.png
+/Structured_data/creditcard.csv
+/Structured_data/heart.csv
+/Text/annotations/
+/Text/train2014/
+/Text/training_checkpoints/
+/Text/captions.zip
+/Text/train2014.zip
+/models/
