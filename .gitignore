@@ -38,3 +38,5 @@ ML_basics_with_Keras/training_2/checkpoint
 /ML_basics_with_Keras/saved_model/
 /ML_basics_with_Keras/training_1/
 /ML_basics_with_Keras/training_2/
+*.tsv
+*.pyc
