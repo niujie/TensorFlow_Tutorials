@@ -117,8 +117,8 @@ print('Eval loss: {}, Eval Accuracy: {}'.format(eval_loss, eval_acc))
 
 path = 'saved_model\\'
 
-# with strategy.scope():
-#     model.save(path, save_format='tf')
+with strategy.scope():
+    model.save(path, save_format='tf')
 
 unreplicated_model = tf.keras.models.load_model(path)
 
