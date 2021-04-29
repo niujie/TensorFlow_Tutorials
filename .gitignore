@@ -42,3 +42,5 @@ ML_basics_with_Keras/training_2/checkpoint
 /.ipynb_checkpoints/
 *.tsv
 *.pyc
+.DS_Store
+/.vscode/
