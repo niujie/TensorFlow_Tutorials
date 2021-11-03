@@ -102,7 +102,7 @@ def show_plot(plot_data, delta, title):
     return plt
 
 
-show_plot([x_train_uni[0], y_train_uni[0]], 0, 'Sample Example')
+show_plot([x_train_uni[0], y_train_uni[0]], univariate_future_target, 'Sample Example')
 plt.show()
 
 
@@ -111,7 +111,7 @@ def baseline(history):
     return np.mean(history)
 
 
-show_plot([x_train_uni[0], y_train_uni[0], baseline(x_train_uni[0])], 0,
+show_plot([x_train_uni[0], y_train_uni[0], baseline(x_train_uni[0])], univariate_future_target,
           'Baseline Prediction Example')
 plt.show()
 
@@ -145,7 +145,7 @@ simple_lstm_model.fit(train_univariate, epochs=EPOCHS,
 # Predict using the simple LSTM model
 for x, y in val_univariate.take(3):
     plot = show_plot([x[0].numpy(), y[0].numpy(),
-                      simple_lstm_model.predict(x)[0]], 0, 'Simple LSTM model')
+                      simple_lstm_model.predict(x)[0]], univariate_future_target, 'Simple LSTM model')
     plot.show()
 
 # Part 2: Forecast a multivariate time series
@@ -188,7 +188,7 @@ def multivariate_data(_dataset, target, start_index, end_index, history_size,
 
 
 past_history = 720
-future_target = 72
+future_target = 0
 STEP = 6
 
 x_train_single, y_train_single = multivariate_data(dataset, dataset[:, 1], 0,
@@ -246,7 +246,7 @@ plot_train_history(single_step_history,
 # Predict a single step future
 for x, y in val_data_single.take(3):
     plot = show_plot([x[0][:, 1].numpy(), y[0].numpy(),
-                      single_step_model.predict(x)[0]], 12,
+                      single_step_model.predict(x)[0]], future_target,
                      'Single Step Prediction')
     plot.show()
 
@@ -291,7 +291,7 @@ multi_step_model = tf.keras.models.Sequential()
 multi_step_model.add(tf.keras.layers.LSTM(32,
                                           return_sequences=True,
                                           input_shape=x_train_multi.shape[-2:]))
-multi_step_model.add(tf.keras.layers.LSTM(16, activation='relu'))
+multi_step_model.add(tf.keras.layers.LSTM(16))
 multi_step_model.add(tf.keras.layers.Dense(72))
 
 multi_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
